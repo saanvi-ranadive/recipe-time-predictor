@@ -24,9 +24,9 @@ Before completing our analysis, we merged and cleaned the raw data through the f
 
 7. Dropped 'calories', '%DV_fat', and '%DV_sugar' columns.
 
-8. Dropped outliers in terms of the 'minutes' column (i.e. recipes that took less than 0 minutes and more than 600 minutes, because any cooking time outside of these bounds does not seem viable.) We dropped these values because in later steps such as hypothesis testing and predictive modeling, we found that these outliers skewed our results.
+8. Dropped outliers in terms of the 'minutes' column (i.e. recipes that took less than 0 minutes and more than 600 minutes, because any cooking time outside of these bounds does not seem viable.) We dropped these values so that in later steps like hypothesis testing and predictive modeling, these outliers would not skew our results.
 
-Resulting DataFrame (2231766 rows x 21 columns):
+First 5 rows of resulting DataFrame (2231766 rows x 21 columns):
 
 | name | id | minutes | contributor_id | submitted | tags             | nutrition       | n_steps | steps                   | description         | ingredients        |  n_ingredients | user_id | date | rating | review             |   average_rating | standardized_calories | standardized_fat | standardized_sugar |   health_score |
 |:-----|---:|-------:|---------------:|:----------|:------------------|:-----------------|--------:|:-----------------------|:--------------------|:--------------------|---------------:|--------:|:----|-------:|:------------------|--------------:|---------------------:|-----------------:|---------------------:|-------------:|
@@ -38,6 +38,20 @@ Resulting DataFrame (2231766 rows x 21 columns):
 
 
 ### Univariate Analysis
+
+<iframe
+  src="figures/univariate1.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+<iframe
+  src="figures/univariate2.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
 
 ## Assessment of Missingness (Saanvi)
 

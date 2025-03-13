@@ -4,7 +4,7 @@ Names: Saanvi Ranadive and Ritvik Chand
 
 ## Introduction (Ritvik)
 
-## Data Cleaning and Exploratory Data Analysis (Saanvi)
+## Data Cleaning and Exploratory Data Analysis
 
 ### Data Cleaning
 
@@ -92,7 +92,92 @@ First, we created a new column called 'health_score_bin' by segmenting the 'heal
 
 This grouped table shows the increasing trend of mean cooking time across the 2nd, 3rd, and 4th bins. With a 'health_score' range of -30 to 0, these bins dominated the scatter plot, giving the sense that as 'health_score' increases, so does 'minutes'. However, this entire trend was within the unhealthy category, and we see that the healthy category (contained within the bin 0.5 to 2), has the lowest average cooking time.
 
-## Assessment of Missingness (Saanvi)
+## Assessment of Missingness
+
+We were interested in exploring the missingness of various columns in our DataFrame. The first step we took was to count the number of missing values in each column. We received the following counts:
+
+name 1
+id 0
+minutes 0
+contributor_id 0
+submitted 0
+tags 0
+nutrition 0
+n_steps 0
+steps 0
+description 113
+ingredients 0
+n_ingredients 0
+user_id 1
+date 1
+rating 14740
+review 56
+average_rating 2706
+standardized_calories 0
+standardized_fat 0
+standardized_sugar 0
+health_score 0
+is_healthy 0
+
+The only columns with a significant number of missing values are 'description', 'rating', 'review', and 'average_rating'.
+
+### NMAR Analysis
+We believe that the 'review' column may be Not Missing At Random (NMAR). For features that are NMAR, the probability of a value being missing depends on the missing value itself. We think the 'review' column is NMAR because people who felt strongly about the recipe (people who either loved it or hated it) would be more likely to express their opinion and give feedback than someone who felt neutral about the recipe.
+
+If a user constantly revisit the same recipe, it would be an indication that they really enjoyed it, but if a user only visited the recipe once, it could indicate that they did not like it very much, or that they felt neutral about it. We think it would be interesting to collect data on how many times the user cooked this recipe, as it could indicate how much they interacted with the recipe and thus their likeliness to leave a review. 
+
+### Missingness Dependency
+We will analyze the missingness of the 'description' column in relation to the 'health_score' and 'minutes' columns. Specifically, we will run two permutation tests to investigate if the missingness of 'description' is dependent on the 'health_score' and 'minutes' columns.
+
+<!-- We predict that the missingness of 'description' will be dependent on 'minutes' because people may be more likely to write a review of a recipe with a longer cooking time (since they spent more time interacting with the recipe), while healthiness of a recipe will probably not affect how likely someone is to leave a review. -->
+
+**Investigating the Missingness Dependency of 'Description' on 'Health_Score'**
+
+Null Hypothesis: The distribution of 'health_score' when 'description' is missing is the same as the distribution when 'description' is not missing.
+
+Alternate Hypothesis: The distribution of 'health_score' when when 'description' is missing is not the same as the distribution when 'description' is not missing.
+
+Test Statistic: total variation distance
+
+Significance Level: 0.05
+
+Number of Permutations: 1000
+
+<iframe
+  src="figures/missingness1.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+The observed statistic of "0.001" (represented by the vertical red line) leads us to 
+**reject the null hypothesis**. 
+
+This test indicates that the missingness of 'description' does depend on 'health_score'.
+
+**Investigating the Missingness Dependency of 'Description' on 'Minutes'**
+
+Null Hypothesis: The distribution of 'minutes' when 'description' is missing is the same as the distribution when 'description' is not missing.
+
+Alternate Hypothesis: The distribution of 'minutes' when when 'description' is missing is not the same as the distribution when 'description' is not missing.
+
+Test Statistic: total variation distance
+
+Significance Level: 0.05
+
+Number of Permutations: 1000
+
+<iframe
+  src="figures/missingness2.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+The observed statistic of "0.235" (represented by the vertical red line) leads us to 
+**fail to reject the null hypothesis**. 
+
+This test does not provide evidence that the missingness of 'description' depends on 'health_score'.
 
 ## Hypothesis Testing (Saanvi)
 

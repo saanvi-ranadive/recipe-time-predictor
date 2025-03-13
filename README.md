@@ -46,6 +46,7 @@ First 5 rows of resulting DataFrame (2231766 rows x 22 columns):
   width="800"
   height="600"
   frameborder="0"
+  style="margin-bottom: 0; padding: 0;"
 ></iframe>
 
 This histogram displays the distribution of cooking times for all recipes in minutes. The figure indicates that majority of recipes have a cooking time that falls between 0 and 100 minutes. Despite our removal of outlier values, the plot is still heavily right skewed. This could potentially cause issues when exploring trends with recipes across the 0-600 minute range. Specifically, the trends could become less reliable as cooking time exceeds 100 minutes due to the limited data availability and potential variability in those longer cooking times.
@@ -97,27 +98,49 @@ This grouped table shows the increasing trend of mean cooking time across the 2n
 We were interested in exploring the missingness of various columns in our DataFrame. The first step we took was to count the number of missing values in each column. We received the following counts:
 
 name 1
+
 id 0
+
 minutes 0
+
 contributor_id 0
+
 submitted 0
+
 tags 0
+
 nutrition 0
+
 n_steps 0
+
 steps 0
+
 description 113
+
 ingredients 0
+
 n_ingredients 0
+
 user_id 1
+
 date 1
+
 rating 14740
+
 review 56
+
 average_rating 2706
+
 standardized_calories 0
+
 standardized_fat 0
+
 standardized_sugar 0
+
 health_score 0
+
 is_healthy 0
+
 
 The only columns with a significant number of missing values are 'description', 'rating', 'review', and 'average_rating'.
 
@@ -133,15 +156,15 @@ We will analyze the missingness of the 'description' column in relation to the '
 
 **Investigating the Missingness Dependency of 'Description' on 'Health_Score'**
 
-Null Hypothesis: The distribution of 'health_score' when 'description' is missing is the same as the distribution when 'description' is not missing.
+**Null Hypothesis**: The distribution of 'health_score' when 'description' is missing is the same as the distribution when 'description' is not missing.
 
-Alternate Hypothesis: The distribution of 'health_score' when when 'description' is missing is not the same as the distribution when 'description' is not missing.
+**Alternate Hypothesis**: The distribution of 'health_score' when when 'description' is missing is not the same as the distribution when 'description' is not missing.
 
-Test Statistic: total variation distance
+**Test Statistic**: total variation distance
 
-Significance Level: 0.05
+**Significance Level**: 0.05
 
-Number of Permutations: 1000
+**Number of Permutations**: 1000
 
 <iframe
   src="figures/missingness1.html"
@@ -151,21 +174,21 @@ Number of Permutations: 1000
 ></iframe>
 
 The observed statistic of "0.001" (represented by the vertical red line) leads us to 
-**reject the null hypothesis**. 
+*reject the null hypothesis*. 
 
 This test indicates that the missingness of 'description' does depend on 'health_score'.
 
 **Investigating the Missingness Dependency of 'Description' on 'Minutes'**
 
-Null Hypothesis: The distribution of 'minutes' when 'description' is missing is the same as the distribution when 'description' is not missing.
+**Null Hypothesis**: The distribution of 'minutes' when 'description' is missing is the same as the distribution when 'description' is not missing.
 
-Alternate Hypothesis: The distribution of 'minutes' when when 'description' is missing is not the same as the distribution when 'description' is not missing.
+**Alternate Hypothesis**: The distribution of 'minutes' when when 'description' is missing is not the same as the distribution when 'description' is not missing.
 
-Test Statistic: total variation distance
+**Test Statistic**: total variation distance
 
-Significance Level: 0.05
+**Significance Level**: 0.05
 
-Number of Permutations: 1000
+**Number of Permutations**: 1000
 
 <iframe
   src="figures/missingness2.html"
@@ -175,7 +198,7 @@ Number of Permutations: 1000
 ></iframe>
 
 The observed statistic of "0.235" (represented by the vertical red line) leads us to 
-**fail to reject the null hypothesis**. 
+*fail to reject the null hypothesis*. 
 
 This test does not provide evidence that the missingness of 'description' depends on 'health_score'.
 

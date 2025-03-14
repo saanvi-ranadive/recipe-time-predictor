@@ -51,25 +51,12 @@ First 5 rows of resulting DataFrame (2231766 rows x 22 columns):
 
 This histogram displays the distribution of cooking times for all recipes in minutes. The figure indicates that majority of recipes have a cooking time that falls between 0 and 100 minutes. Despite our removal of outlier values, the plot is still heavily right skewed. This could potentially cause issues when exploring trends with recipes across the 0-600 minute range. Specifically, the trends could become less reliable as cooking time exceeds 100 minutes due to the limited data availability and potential variability in those longer cooking times.
 
-<!-- <iframe
+<iframe
   src="figures/univariate2.html"
   width="800"
   height="600"
   frameborder="0"
-></iframe> -->
-
-<div id="plot-container">Loading...</div>
-
-<script>
-  fetch("figures/univariate2.html.gz")
-    .then(response => response.arrayBuffer())
-    .then(buffer => {
-      const decoder = new TextDecoder("utf-8"); 
-      const text = decoder.decode(buffer);
-      document.getElementById("plot-container").innerHTML = text;
-    })
-    .catch(error => console.error("Error loading Plotly figure:", error));
-</script>
+></iframe>
 
 This figure shows a box plot comparison of cooking times for recipes classified as "healthy" and "unhealthy". The figure shows that recipes that are healthy take less time to prepare on average. This is an interesting discovery as we initially predicted that healthier recipes would generally take longer to make.
 
@@ -165,8 +152,6 @@ If a user constantly revisit the same recipe, it would be an indication that the
 ### Missingness Dependency
 We will analyze the missingness of the 'description' column in relation to the 'health_score' and 'minutes' columns. Specifically, we will run two permutation tests to investigate if the missingness of 'description' is dependent on the 'health_score' and 'minutes' columns.
 
-<!-- We predict that the missingness of 'description' will be dependent on 'minutes' because people may be more likely to write a review of a recipe with a longer cooking time (since they spent more time interacting with the recipe), while healthiness of a recipe will probably not affect how likely someone is to leave a review. -->
-
 **Investigating the Missingness Dependency of 'Description' on 'Health_Score'**
 
 **Null Hypothesis**: The distribution of 'health_score' when 'description' is missing is the same as the distribution when 'description' is not missing.
@@ -186,7 +171,7 @@ We will analyze the missingness of the 'description' column in relation to the '
   frameborder="0"
 ></iframe>
 
-The observed statistic of "0.001" (represented by the vertical red line) leads us to 
+We found an observed tvd of 0.153 and a p-value 0.002 (represented by the vertical red line), which leads us to 
 *reject the null hypothesis*. 
 
 This test indicates that the missingness of 'description' does depend on 'health_score'.
@@ -210,7 +195,7 @@ This test indicates that the missingness of 'description' does depend on 'health
   frameborder="0"
 ></iframe>
 
-The observed statistic of "0.235" (represented by the vertical red line) leads us to 
+We found an observed tvd of 0.227 and a p-value of 0.225, (represented by the vertical red line), which leads us to 
 *fail to reject the null hypothesis*. 
 
 This test does not provide evidence that the missingness of 'description' depends on 'health_score'.
@@ -221,15 +206,28 @@ We are interested in exploring the relationship between the healthiness of recip
 
 **Null hypothesis**: The average number of minutes needed to prepare recipes that are classified as healthy is the same as the average number of minutes needed to prepare recipes that are classified as unhealthy.
 
-**Alternative Hypothesis**: The average number of minutes needed to prepare recipes that are classified as healthy is different than the average number of minutes needed to prepare recipes that are classified as unhealthy.
+**Alternative Hypothesis**: The average number of minutes needed to prepare recipes that are classified as healthy is less than the average number of minutes needed to prepare recipes that are classified as unhealthy.
 
-**Test Statistic**: Difference of means
+**Test Statistic**: Difference of means (mean_time~(healthy)~ - mean_time~(unhealthy)~)
 
 **Significance Level**: 0.05
 
 **Number of Permutations**: 1000
 
+The observed test statistic for this test is -18.669, meaning that for this dataset, recipes classified as healthy took 18.669 minutes less to make than recipes classified as unhealthy, on average.
 
+The graph below displays the observed_tvd as a vertical red line, showing a significant deviation from the distribution. Consequently, the calculated p-value is 0.0.
+
+<iframe
+  src="figures/permutation_test.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+Because our p-value 0.0 < the significance level of 0.005, we **reject the null hypothesis**. The distribution of cooking times for healthy recipes has a lower mean than the distribution of cooking times for unhealthy recipes. 
+
+This could be due to outliers in either group: healthy outliers could include salads and sandwiches (foods that do not take long to prepare), while unhealthy outliers could be deep-fried foods or baked goods (foods that would take a long time to prepare).
 
 
 ## Framing a Prediction Problem (Saanvi)

@@ -97,49 +97,7 @@ This grouped table shows the increasing trend of mean cooking time across the 2n
 
 We were interested in exploring the missingness of various columns in our DataFrame. The first step we took was to count the number of missing values in each column. We received the following counts:
 
-name 1
-
-id 0
-
-minutes 0
-
-contributor_id 0
-
-submitted 0
-
-tags 0
-
-nutrition 0
-
-n_steps 0
-
-steps 0
-
-description 113
-
-ingredients 0
-
-n_ingredients 0
-
-user_id 1
-
-date 1
-
-rating 14740
-
-review 56
-
-average_rating 2706
-
-standardized_calories 0
-
-standardized_fat 0
-
-standardized_sugar 0
-
-health_score 0
-
-is_healthy 0
+'|                       |     0 |\n|:----------------------|------:|\n| name                  |     1 |\n| id                    |     0 |\n| minutes               |     0 |\n| contributor_id        |     0 |\n| submitted             |     0 |\n| tags                  |     0 |\n| nutrition             |     0 |\n| n_steps               |     0 |\n| steps                 |     0 |\n| description           |   113 |\n| ingredients           |     0 |\n| n_ingredients         |     0 |\n| user_id               |     1 |\n| date                  |     1 |\n| rating                | 14740 |\n| review                |    56 |\n| average_rating        |  2706 |\n| standardized_calories |     0 |\n| standardized_fat      |     0 |\n| standardized_sugar    |     0 |\n| health_score          |     0 |\n| is_healthy            |     0 |'
 
 
 The only columns with a significant number of missing values are 'description', 'rating', 'review', and 'average_rating'.
@@ -200,7 +158,7 @@ We found an observed tvd of 0.227 and a p-value of 0.225, (represented by the ve
 
 This test does not provide evidence that the missingness of 'description' depends on 'health_score'.
 
-## Hypothesis Testing (Saanvi)
+## Hypothesis Testing
 
 We are interested in exploring the relationship between the healthiness of recipes and their cooking time. Therefore, we decided to implement a permutation test to find out if recipes classified as "healthy" (recipes with a health_score of >= 0.5) have the same distribution of cooking times as those recipes classified as "unhealthy". We have already seen from the second univariate graph that healthy recipes in our dataset have a lower average cooking time. Now we will investigate if this difference was purely by chance or due to a difference in distributions.
 
@@ -230,7 +188,15 @@ Because our p-value 0.0 < the significance level of 0.005, we **reject the null 
 This could be due to outliers in either group: healthy outliers could include salads and sandwiches (foods that do not take long to prepare), while unhealthy outliers could be deep-fried foods or baked goods (foods that would take a long time to prepare).
 
 
-## Framing a Prediction Problem (Saanvi)
+## Framing a Prediction Problem
+
+Our permutation test from the previous section showed us that 'healthy' and 'unhealthy' recipes do not necessarily have the same distribution of cooking times. This indicates that the 'health_score' could be a meaningful feature in predicting cooking time of a recipe. In the following sections, we will address the following prediction problem:
+
+**How many minutes will it take to cook a recipe based on its number of calories, amount of sugar, and amount of fat?**
+
+This is a regression problem, as the column we are planning to predict, 'minutes', is a numerical variable signifying cooking time.
+
+We will use **root mean squared error** (RMSE) as the main metric to evaluate our models. The reason for this choice is that the distribution of our response variable, 'minutes' was highly right skewed. RMSE heavily penalizes larger errors (due to the squaring step in the RMSE calculation), so it is particularly useful for minimizing error for extreme values. Additionally, it returns a value in the same units as the response variable (minutes), allowing for better interpretability. We will also use the **R^2 score** to measure how much of the variance in the target variable is explained by the model. Together, both of these metrics will help us effectively compare performance across models.
 
 ## Baseline Model (Ritvik)
 

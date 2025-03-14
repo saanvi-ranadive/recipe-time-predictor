@@ -1,8 +1,47 @@
 # Does Nutrition Affect Cooking Time? A Data-Driven Analysis of Recipes
-Final Project for UCSD's DSC80 Course
+Final Project for UC San Diego's DSC80 Course
 Names: Saanvi Ranadive and Ritvik Chand
 
-## Introduction (Ritvik)
+## Introduction
+
+This project was conducted at UC San Diego as a final project for the DSC80 Course.
+
+Throughout this investigation, we explore the relationship between healthiness and cooking time of recipes. We aim to answer the question: **Is a recipe's nutritional information (including number of calories, amount of fat, and amount of sugar) a strong predictor of how long it takes to cook the recipe?** In our personal experience, we've found that healthier meals often take longer to prepare, and were wondering if this was reflective of a broader trend. Understanding whether nutritional factors impact cooking time can provide valuable insights for people cooking at home, meal preparation, and the food industry. The existence of strong trends between nutrition and cooking time could help people make more informed decisions about meal planning, assist in designing recipes, and ultimately make it easier for individuals to prioritize nutrition without sacrificing too much time in the kitchen.
+
+We will analyze two datasets from [food.com](https://www.food.com/): **recipes**, which focuses on information about each recipe as uploaded by the contributer; and **interactions**, which details the ratings and reviews from users who used each recipe.
+
+**Recipes Dataset**
+
+(83782 rows x 13 columns)
+
+| Column Name            | Description                          |
+|------------------------|-------------------------------------:|
+| name                  | (object) name of recipe              |
+| id                    | (int64) unique recipe ID             |
+| minutes               | (int64) number of minutes to prepare |
+| contributor_id        | (int64) unique contributer ID        |
+| submitted             | (object) date submitted              |
+| tags                  | (object) relevant recipe tags        |
+| nutrition             | (object) [calories (#), total fat (PDV), sugar (PDV), sodium (PDV), protein (PDV), saturated fat (PDV), carbohydrates (PDV)]|
+| n_steps               | (int64) number of steps in the recipe|
+| steps                 | (object) text for recipe steps       |
+| description           | (object) description of recipe       |
+| ingredients           | (object) text for recipe ingredients |
+| n_ingredients         | (int64) number of ingredients        |
+
+**Interactions Dataset**
+
+(731927 rows x 5 columns)
+
+| Column Name            | Description                            |
+|------------------------|---------------------------------------:|
+| user_id               | (int64) unique user ID                 |
+| recipe_id             | (int64) unique recipe ID               |
+| date                  | (object) date rating/ review submitted |
+| rating                | (int64) rating from 1-5 submitted      |
+| review                | (object) review submitted              |
+
+The most relevant columns to our question are the 'nutrition' and 'minutes' columns from the Recipes Dataset. In the next step, we will extract calories, total fat, and sugar from the nutrition column in order to obtain the necessary information to answer our question. We will use these columns throughout our investigation, creating a composite 'health_score' and boolean 'is_healthy' column to further aid our analysis.
 
 ## Data Cleaning and Exploratory Data Analysis
 
@@ -28,7 +67,36 @@ Before completing our analysis, we merged and cleaned the raw data through the f
 
 9. Dropped outliers in terms of the 'minutes' column (i.e. recipes that took less than 0 minutes and more than 600 minutes, because any cooking time outside of these bounds does not seem viable.) We dropped these values so that in later steps like hypothesis testing and predictive modeling, these outliers would not skew our results.
 
-First 5 rows of resulting DataFrame (2231766 rows x 22 columns):
+**Resulting DataFrame**:
+
+(2231766 rows x 22 columns)
+
+| Column Name            | Data Type      |
+|------------------------|---------------:|
+| name                  | object         |
+| id                    | int64          |
+| minutes               | int64          |
+| contributor_id        | int64          |
+| submitted             | object         |
+| tags                  | object         |
+| nutrition             | object         |
+| n_steps               | int64          |
+| steps                 | object         |
+| description           | object         |
+| ingredients           | object         |
+| n_ingredients         | int64          |
+| user_id               | int64          |
+| date                  | object         |
+| rating                | int64          |
+| review                | object         |
+| average_rating        | float64        |
+| standardized_calories | float64        |
+| standardized_fat      | float64        |
+| standardized_sugar    | float64        |
+| health_score          | float64        |
+| is_healthy            | bool           |
+
+First 5 rows of resulting DataFrame:
 
 | name | id      |minutes|contributor_id| submitted | tags             | nutrition                  |n_steps| steps                   | description         | ingredients        |n_ingredients| user_id       | date   |rating| review             |average_rating|standardized_calories|standardized_fat|standardized_sugar|health_score|is_healthy|
 |:-----|--------:|-------:|------------:|:----------|:------------------|:--------------------------|-------:|:-------------------------|:-------------------|:------------------|-----------:|-------------:|:--------|------:|:-------------------|-------------:|--------------------:|---------------:|-----------------:|-----------:|---------:|
@@ -63,7 +131,7 @@ This histogram displays the distribution of cooking times for all recipes in min
   frameborder="0"
 ></iframe>
 
-This figure shows an overlayed histogram comparison of cooking times for recipes classified as "healthy" and "unhealthy". The vertical dashed lines in this figure show that recipes that are healthy take less time to prepare on average than unhealthy recipes. This is an interesting discovery as we initially predicted that healthier recipes would generally take longer to make.
+This figure shows an overlayed histogram comparison of cooking times for recipes classified as "healthy" and "unhealthy". The vertical dashed lines in this figure show that recipes that are healthy take less time to prepare on average than unhealthy recipes. This is an interesting discovery as our initial thinking was that healthier recipes would generally take longer to make.
 
 ### Bivariate Analysis
 
@@ -221,7 +289,7 @@ This could be due to outliers in either group: healthy outliers could include sa
 
 Our permutation test from the previous section showed us that 'healthy' and 'unhealthy' recipes do not necessarily have the same distribution of cooking times. This indicates that the 'health_score' could be a meaningful feature in predicting cooking time of a recipe. In the following sections, we will address the following prediction problem:
 
-**How many minutes will it take to cook a recipe based on its number of calories, amount of sugar, and amount of fat?**
+**How many minutes will it take to cook a recipe based on its number of calories, amount of fat, and amount of sugar?**
 
 This is a regression problem, as the column we are planning to predict, 'minutes', is a numerical variable signifying cooking time.
 

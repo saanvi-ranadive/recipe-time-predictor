@@ -2,6 +2,7 @@
 Final Project for UC San Diego's DSC80 Course
 Names: Saanvi Ranadive and Ritvik Chand
 
+
 ## Introduction
 
 This project was conducted at UC San Diego as a final project for the DSC80 Course.
@@ -43,11 +44,12 @@ We will analyze two datasets from [food.com](https://www.food.com/): **recipes**
 
 The most relevant columns to our question are the 'nutrition' and 'minutes' columns from the Recipes Dataset. In the next step, we will extract calories, total fat, and sugar from the nutrition column in order to obtain the necessary information to answer our question. We will use these columns throughout our investigation, creating a composite 'health_score' and boolean 'is_healthy' column to further aid our analysis.
 
+
 ## Data Cleaning and Exploratory Data Analysis
 
 ### Data Cleaning
 
-Before completing our analysis, we merged and cleaned the raw data through the following steps:
+As part of the data preparation process, we merged and cleaned the raw data through the following steps:
 
 1. Left merged the recipes DataFrame on the 'id' column with the interactions DataFrame on the 'recipe_id' column, dropping ['Unnamed: 0', 'recipe_id'] columns.
 
@@ -106,9 +108,7 @@ First 5 rows of resulting DataFrame:
 | 412 broccoli casserole | 306168 | 40 | 50969 | 2008-05-30  | ['60-minutes-or-less', 'time-to-make'...] | [194.8, 20.0, 6.0, 32.0, 22.0, 36.0, 3.0] | 6 | ['preheat oven to 350 degrees', 'spray a' ...] | since there are already 411 recipes for broccoli casserole... | ['frozen broccoli cuts', 'cream of chicken soup', 'sharp'...] | 9 | 1.19628e+06 | 2009-04-13 | 5 | I made this for my son's first...   | 5 |  -0.385322 | -0.215195 | -0.274821  | 0.875337 | True |
 | 412 broccoli casserole | 306168 | 40 | 50969 | 2008-05-30  | ['60-minutes-or-less', 'time-to-make'...] | [194.8, 20.0, 6.0, 32.0, 22.0, 36.0, 3.0] | 6 | ['preheat oven to 350 degrees', 'spray a'... ] | since there are already 411 recipes for broccoli casserole... | ['frozen broccoli cuts', 'cream of chicken soup', 'sharp'...] | 9 | 768828 | 2013-08-02 | 5 | Loved this.  Be sure to completely... | 5 |  -0.385322 | -0.215195 | -0.274821  | 0.875337 | True |
 
-
 ### Univariate Analysis
-
 
 **Univariate Plot #1**
 
@@ -150,10 +150,9 @@ Together, these two plots indicate an example of Simpson's Paradox, because when
 
 Looking at the Bivariate Plot, we can hypothesize that the reason for this paradox is that the blue (healthy) points are highly concentrated in a vertical band that is evenly distributed across the y-axis, resulting in a moderate average cooking time. Meanwhile the orange (unhealthy) points are more spread out, with a significant number of long recipes skewing the average cooking time of unnhealthy recipes to be higher.
 
-
 ### Interesting Aggregates
 
-In this section, we will further investigate the reason for the Simpson's Paradox described above, using a grouped table. We are interested in finding out how the average cooking time ('minutes') varies across different 'health_scores' and this trend translates to the labels of 'healthy' and 'unhealthy'.
+In this section, we will further investigate the reason for the Simpson's Paradox described above, using a grouped table. We are interested in finding out how the average cooking time ('minutes') varies across different 'health_scores,' and how this trend translates to the labels of 'healthy' and 'unhealthy'.
 
 First, we created a new column called 'health_score_bin' by segmenting the 'health_score' column into bins of [-40, -30, -20, -10, 0, 0.5, 2]. Then, we grouped by 'health_score_bin' and 'is_healthy', aggregating by both mean and count. We obtained the resulting DataFrame:
 
@@ -166,7 +165,8 @@ First, we created a new column called 'health_score_bin' by segmenting the 'heal
 | 0 to 0.5                   | False                |               63.5126 |                  41927 |
 | 0.5 to 2                   | True                 |               48.7758 |                 118684 |
 
-This grouped table shows the increasing trend of mean cooking time across the 2nd, 3rd, and 4th bins. With a 'health_score' range of -30 to 0, these bins dominated the scatter plot, giving the sense that as 'health_score' increases, so does 'minutes'. However, this entire trend was within the unhealthy category, and we see that the healthy category (contained within the bin 0.5 to 2), has the lowest average cooking time.
+This grouped table shows an increasing trend of mean cooking time across the 2nd, 3rd, and 4th bins. With a 'health_score' range of -30 to 0, these bins dominated the scatter plot, giving the sense that as 'health_score' increases, so does 'minutes'. However, this entire trend was within the unhealthy category, and we see that the healthy category (contained within the 'health_score_bin' 0.5 to 2), actually has the lowest average cooking time.
+
 
 ## Assessment of Missingness
 
@@ -226,10 +226,9 @@ We will analyze the missingness of the 'description' column in relation to the '
   frameborder="0"
 ></iframe>
 
-We found an observed tvd of 0.153 and a p-value 0.002 (represented by the vertical red line), which leads us to 
-*reject the null hypothesis*. 
+We found an observed tvd of 0.153 (represented by the vertical red line) and a p-value 0.002, which leads us to *reject the null hypothesis*. 
 
-This test indicates that the missingness of 'description' does depend on 'health_score'.
+This test indicates that the missingness of 'description' depends on 'health_score'.
 
 **Investigating the Missingness Dependency of 'Description' on 'Minutes'**
 
@@ -250,14 +249,14 @@ This test indicates that the missingness of 'description' does depend on 'health
   frameborder="0"
 ></iframe>
 
-We found an observed tvd of 0.227 and a p-value of 0.225, (represented by the vertical red line), which leads us to 
-*fail to reject the null hypothesis*. 
+We found an observed tvd of 0.227 (represented by the vertical red line) and a p-value of 0.225, which leads us to *fail to reject the null hypothesis*. 
 
 This test does not provide evidence that the missingness of 'description' depends on 'health_score'.
 
+
 ## Hypothesis Testing
 
-We are interested in exploring the relationship between the healthiness of recipes and their cooking time. Therefore, we decided to implement a permutation test to find out if recipes classified as "healthy" (recipes with a health_score of >= 0.5) have the same distribution of cooking times as those recipes classified as "unhealthy". We have already seen from Univariate Plot #2 that healthy recipes in our dataset have a lower average cooking time. Now we will investigate if this difference was purely by chance or due to a difference in distributions.
+We are interested in exploring the relationship between the healthiness of recipes and their cooking time. Therefore, we decided to implement a permutation test to find out if recipes classified as "healthy" (recipes with a 'health_score' of >= 0.5) have the same distribution of cooking times as those recipes classified as "unhealthy" (recipes with a 'health_score' of < 0.5). We have already seen from Univariate Plot #2 that healthy recipes in our dataset have a lower average cooking time. Now we will investigate if this difference was purely by chance or due to a difference in distributions of cooking times.
 
 **Null hypothesis**: The average number of minutes needed to prepare recipes that are classified as healthy is the same as the average number of minutes needed to prepare recipes that are classified as unhealthy.
 
@@ -271,57 +270,58 @@ We are interested in exploring the relationship between the healthiness of recip
 
 The observed test statistic for this test is -18.669, meaning that for this dataset, recipes classified as healthy took 18.669 minutes less to make than recipes classified as unhealthy, on average.
 
-The graph below displays the observed_tvd as a vertical red line, showing a significant deviation from the distribution. Consequently, the calculated p-value is 0.0.
-
 <iframe
   src="figures/permutation_test.html"
   width="800"
-  height="500"
+  height="520"
   frameborder="0"
 ></iframe>
 
-Because our p-value 0.0 < the significance level of 0.005, we **reject the null hypothesis**. The distribution of cooking times for healthy recipes has a lower mean than the distribution of cooking times for unhealthy recipes. 
+The graph above displays the observed_tvd as a vertical red line, showing a significant deviation from the distribution. Consequently, the calculated p-value is 0.0.
 
-This could be due to outliers in either group: healthy outliers could include salads and sandwiches (foods that do not take long to prepare), while unhealthy outliers could be deep-fried foods or baked goods (foods that would take a long time to prepare).
+Because our p-value 0.0 < the significance level of 0.005, we *reject the null hypothesis*. The distribution of cooking times for healthy recipes has a lower mean than the distribution of cooking times for unhealthy recipes. 
+
+After discovering these results, we reasoned that this could be due to outliers in either group: healthy outliers could include salads and sandwiches (healthy foods that do not take long to prepare), while unhealthy outliers could be deep-fried foods or baked goods (unhealthy foods that would take a long time to prepare).
 
 
 ## Framing a Prediction Problem
 
-Our permutation test from the previous section showed us that 'healthy' and 'unhealthy' recipes do not necessarily have the same distribution of cooking times. This indicates that the 'health_score' could be a meaningful feature in predicting cooking time of a recipe. In the following sections, we will address the following prediction problem:
+Our permutation test from the previous section showed us that 'healthy' and 'unhealthy' recipes do not necessarily have the same distribution of cooking times. This indicates that the nutritional information reflected in the 'health_score' could be a meaningful feature in predicting cooking time of a recipe. In the following sections, we will address the following prediction problem:
 
 **How many minutes will it take to cook a recipe based on its number of calories, amount of fat, and amount of sugar?**
 
 This is a regression problem, as the column we are planning to predict, 'minutes', is a numerical variable signifying cooking time.
 
-We will use **root mean squared error** (RMSE) as the main metric to evaluate our models. The reason for this choice is that the distribution of our response variable, 'minutes' was highly right skewed. RMSE heavily penalizes larger errors (due to the squaring step in the RMSE calculation), so it is particularly useful for minimizing error for extreme values. Additionally, it returns a value in the same units as the response variable (minutes), allowing for better interpretability. We will also use the **R^2 score** to measure how much of the variance in the target variable is explained by the model. Together, both of these metrics will help us effectively compare performance across models.
+We will use **root mean squared error** (RMSE) as the main metric to evaluate our models. The reason for this choice is that the distribution of our response variable, 'minutes' was highly right skewed. RMSE heavily penalizes larger errors (due to the squaring step in the RMSE calculation), so it is particularly useful for minimizing error for extreme values. Additionally, it returns a value in the same units as the response variable (minutes), allowing for better interpretability and evaluation of results. We will also use the **R^2 score** to measure how much of the variance in the target variable is explained by the model. Together, both of these metrics will help us effectively compare performance across models.
+
 
 ## Baseline Model
 
-# Description of Model
+### Description of Model
 For the baseline model, we decided to use a Linear Regression model to predict the cooking time of food recipes based on the nutritional information of the food. Using this model gives us a basic starting point that we can use to establish a benchmark before training more complicated models such as Random Forest regression, Gradient Boosting, and KNN Regressor.
-The y variable which we wanted to predict in our analysis is cooking time in minutes. We first transformed this variable using a log function because of the right-skewed distribution that we observed in cooking times (see Univariate Plot #1). Transforming helped us linearize the relationship between the features and y variables.
+The y variable which we wanted to predict in our analysis is cooking time in minutes. We first transformed this variable using a log function because of the right-skewed distribution that we observed in cooking times (see Univariate Plot #1). Transforming helped us linearize the relationship between the features and y variable.
 
-# Model Features
+### Model Features
 The features that we included in our baseline model are the following: 
 
-- standardized_calories: The standardized number of calorie that the recipe contains (quantitative)
+- standardized_calories: The standardized number of calories that the recipe contains (quantitative)
 - standardized_fat: The standardized amount of fat that the recipe contains (quantitative)
 - standardized_sugar: The standardized sugar content of the recipe (quantitative)
 
 All three features in our baseline model are quantitative variables that had already been standardized in the data cleaning part above. The standardization helps address scale differences between the nutritional variables and improves the model's stability. As all our features were already preprocessed and no categorical variables were included in the baseline model, we did not need to add any extra encoding techniques.
 
-# Model Evaluation and Assessment
+### Model Evaluation and Assessment
 To evaluate our baseline model's performance, we used two metrics, RMSE and R^2. The scores that our baseline model achieved are below:
 
-1. RMSE: 0.94
-2. R^2: 0.06
+1. **RMSE**: 0.94
+2. **R^2**: 0.06
 
-While our baseline model gave us a starting point to work with, we knew that there was room for improvement. One of the reasons why the Linear Regression model possibly lacked is because it assumes a linear relationship between the features and y variable. Since cooking times for various food recipes have more complex interactions between ingredients (features), the linear model would not be able to identify those relationships. In addition, our baseline model uses three nutritional factors, which may not include all the factors that influence cooking time. Some other factors that we posed include the method of cooking, steps of preparation, etc. Lastly, the linear model allows us to identify how only one feature can affect cooking time but not how two features interact with each other. Thus, our baseline model using linear regression gives us satisfactory performance, but many things could be improved to better represent the relationship between cooking time and nutritional content.
+While our baseline model gave us a starting point to work with, we knew that there was room for improvement. One of the reasons why the Linear Regression model did not perform optimally is because it assumes a linear relationship between the features and y variable. Since cooking times for various food recipes have more complex interactions between ingredients (features), the linear model would not be able to identify those relationships. In addition, our baseline model uses three nutritional factors, which may not include all the factors that influence cooking time. Some other factors that we posed include the method of cooking and steps of preparation. Lastly, the linear model allows us to identify how only one feature can affect cooking time but not how two features interact with each other. Thus, our baseline model using linear regression gives us satisfactory performance, but many things could be improved to better represent the relationship between cooking time and nutritional content.
 
 
 ## Final Model
 
-# Feature Engineering
+### Feature Engineering
 
 To improve the performance of our baseline model, we implemented 2 feature engineering techniques to help improve the precision of our baseline model. The first one was **Polynomial Features** which helped us to interpret the non-linear relationship between the nutritional features (standardized_calories, standardized_fat, and standardized_sugar). This transformation approach creates interaction values that allow the model to learn how combinations of these nutritional factors might asynchronously affect cooking time. This helps the model discover relationships that exist in cooking. The second technique is a **Quantile Transformer**, which essentially just normalizes the distributions of the features that we have selected. It helps to handle skewed data by mapping the original values to a normal distribution. There are many recipes with moderate calorie counts and fewer with extremely high values. By normalizing these distributions, we help the model treat outliers more appropriately and improve its ability to learn from the entire range of nutritional profiles.
 

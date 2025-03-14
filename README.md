@@ -51,12 +51,25 @@ First 5 rows of resulting DataFrame (2231766 rows x 22 columns):
 
 This histogram displays the distribution of cooking times for all recipes in minutes. The figure indicates that majority of recipes have a cooking time that falls between 0 and 100 minutes. Despite our removal of outlier values, the plot is still heavily right skewed. This could potentially cause issues when exploring trends with recipes across the 0-600 minute range. Specifically, the trends could become less reliable as cooking time exceeds 100 minutes due to the limited data availability and potential variability in those longer cooking times.
 
-<iframe
+<!-- <iframe
   src="figures/univariate2.html"
   width="800"
   height="600"
   frameborder="0"
-></iframe>
+></iframe> -->
+
+<div id="plot-container">Loading...</div>
+
+<script>
+  fetch("figures/univariate2.html.gz")
+    .then(response => response.arrayBuffer())
+    .then(buffer => {
+      const decoder = new TextDecoder("utf-8"); 
+      const text = decoder.decode(buffer);
+      document.getElementById("plot-container").innerHTML = text;
+    })
+    .catch(error => console.error("Error loading Plotly figure:", error));
+</script>
 
 This figure shows a box plot comparison of cooking times for recipes classified as "healthy" and "unhealthy". The figure shows that recipes that are healthy take less time to prepare on average. This is an interesting discovery as we initially predicted that healthier recipes would generally take longer to make.
 
@@ -158,7 +171,7 @@ We will analyze the missingness of the 'description' column in relation to the '
 
 **Null Hypothesis**: The distribution of 'health_score' when 'description' is missing is the same as the distribution when 'description' is not missing.
 
-**Alternate Hypothesis**: The distribution of 'health_score' when when 'description' is missing is not the same as the distribution when 'description' is not missing.
+**Alternative Hypothesis**: The distribution of 'health_score' when when 'description' is missing is not the same as the distribution when 'description' is not missing.
 
 **Test Statistic**: total variation distance
 
@@ -182,7 +195,7 @@ This test indicates that the missingness of 'description' does depend on 'health
 
 **Null Hypothesis**: The distribution of 'minutes' when 'description' is missing is the same as the distribution when 'description' is not missing.
 
-**Alternate Hypothesis**: The distribution of 'minutes' when when 'description' is missing is not the same as the distribution when 'description' is not missing.
+**Alternative Hypothesis**: The distribution of 'minutes' when when 'description' is missing is not the same as the distribution when 'description' is not missing.
 
 **Test Statistic**: total variation distance
 
@@ -203,6 +216,21 @@ The observed statistic of "0.235" (represented by the vertical red line) leads u
 This test does not provide evidence that the missingness of 'description' depends on 'health_score'.
 
 ## Hypothesis Testing (Saanvi)
+
+We are interested in exploring the relationship between the healthiness of recipes and their cooking time. Therefore, we decided to implement a permutation test to find out if recipes classified as "healthy" (recipes with a health_score of >= 0.5) have the same distribution of cooking times as those recipes classified as "unhealthy". We have already seen from the second univariate graph that healthy recipes in our dataset have a lower average cooking time. Now we will investigate if this difference was purely by chance or due to a difference in distributions.
+
+**Null hypothesis**: The average number of minutes needed to prepare recipes that are classified as healthy is the same as the average number of minutes needed to prepare recipes that are classified as unhealthy.
+
+**Alternative Hypothesis**: The average number of minutes needed to prepare recipes that are classified as healthy is different than the average number of minutes needed to prepare recipes that are classified as unhealthy.
+
+**Test Statistic**: Difference of means
+
+**Significance Level**: 0.05
+
+**Number of Permutations**: 1000
+
+
+
 
 ## Framing a Prediction Problem (Saanvi)
 

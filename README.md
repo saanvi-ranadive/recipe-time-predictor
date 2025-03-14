@@ -251,6 +251,11 @@ To evaluate our baseline model's performance, we used two metrics, RMSE and R^2.
 While our baseline model gave us a starting point to work with, we knew that there was room for improvement. One of the reasons why the Linear Regression model possibly lacked is because it assumes a linear relationship between the features and y variable. Since cooking times for various food recipes have more complex interactions between ingredients (features), the linear model would not be able to identify those relationships. In addition, our baseline model uses three nutritional factors, which may not include all the factors that influence cooking time. Some other factors that we posed include the method of cooking, steps of preparation, etc. Lastly, the linear model allows us to identify how only one feature can affect cooking time but not how two features interact with each other. Thus, our baseline model using linear regression gives us satisfactory performance, but many things could be improved to better represent the relationship between cooking time and nutritional content.
 
 
-## Final Model (Ritvik)
+## Final Model
+
+# Feature Engineering
+
+To improve the performance of our baseline model, we implemented 2 feature engineering techniques to help improve the precision of our baseline model. The first one was **Polynomial Features** which helped us to interpret the non-linear relationship between the nutritional features (standardized_calories, standardized_fat, and standardized_sugar). This transformation approach creates interaction values that allow the model to learn how combinations of these nutritional factors might asynchronously affect cooking time. This helps the model discover relationships that exist in cooking. The second technique is a **Quantile Transformer**, which essentially just normalizes the distributions of the features that we have selected. It helps to handle skewed data by mapping the original values to a normal distribution. There are many recipes with moderate calorie counts and fewer with extremely high values. By normalizing these distributions, we help the model treat outliers more appropriately and improve its ability to learn from the entire range of nutritional profiles.
+
 
 ## Fairness Analysis (Ritvik)

@@ -58,7 +58,7 @@ This histogram displays the distribution of cooking times for all recipes in min
   frameborder="0"
 ></iframe>
 
-This figure shows a box plot comparison of cooking times for recipes classified as "healthy" and "unhealthy". The figure shows that recipes that are healthy take less time to prepare on average. This is an interesting discovery as we initially predicted that healthier recipes would generally take longer to make.
+This figure shows an overlayed histogram comparison of cooking times for recipes classified as "healthy" and "unhealthy". The vertical dashed lines in this figure show that recipes that are healthy take less time to prepare on average than unhealthy recipes. This is an interesting discovery as we initially predicted that healthier recipes would generally take longer to make.
 
 ### Bivariate Analysis
 

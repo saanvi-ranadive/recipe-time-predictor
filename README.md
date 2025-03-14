@@ -326,4 +326,6 @@ While our baseline model gave us a starting point to work with, we knew that the
 To improve the performance of our baseline model, we implemented 2 feature engineering techniques to help improve the precision of our baseline model. The first one was **Polynomial Features** which helped us to interpret the non-linear relationship between the nutritional features (standardized_calories, standardized_fat, and standardized_sugar). This transformation approach creates interaction values that allow the model to learn how combinations of these nutritional factors might asynchronously affect cooking time. This helps the model discover relationships that exist in cooking. The second technique is a **Quantile Transformer**, which essentially just normalizes the distributions of the features that we have selected. It helps to handle skewed data by mapping the original values to a normal distribution. There are many recipes with moderate calorie counts and fewer with extremely high values. By normalizing these distributions, we help the model treat outliers more appropriately and improve its ability to learn from the entire range of nutritional profiles.
 
 
-## Fairness Analysis (Ritvik)
+## Fairness Analysis
+
+After training and evaluating our model, we were curious to see how it would perform on recipes with various numbers of ingredients. We decided to analyze the fairness of our model by evaluating how it performs on **recipes with more than 9 ingredients** vs. **recipes with less than 9 ingredients**. 

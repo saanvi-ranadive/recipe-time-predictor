@@ -30,8 +30,8 @@ Before completing our analysis, we merged and cleaned the raw data through the f
 
 First 5 rows of resulting DataFrame (2231766 rows x 22 columns):
 
-| name | id | minutes | contributor_id | submitted | tags             | nutrition          | n_steps | steps                   | description         | ingredients        |  n_ingredients | user_id | date | rating | review             |   average_rating | standardized_calories | standardized_fat | standardized_sugar |   health_score | is_healthy |
-|:-----|---:|-------:|---------------:|:----------|:------------------|:--------------------|--------:|:-----------------------|:--------------------|:--------------------|---------------:|--------:|:----|-------:|:------------------|--------------:|---------------------:|-----------------:|---------------------:|-------------:|
+| name | id      |minutes|contributor_id| submitted | tags             | nutrition                  |n_steps| steps                   | description         | ingredients        |n_ingredients| user_id       | date   |rating| review             |average_rating|standardized_calories|standardized_fat|standardized_sugar|health_score|is_healthy|
+|:-----|--------:|-------:|------------:|:----------|:------------------|:--------------------------|-------:|:-------------------------|:-------------------|:------------------|-----------:|-------------:|:--------|------:|:-------------------|-------------:|--------------------:|---------------:|-----------------:|-----------:|---------:|
 | 1 brownies in the world... | 333281 |40 | 985201 | 2008-10-27  | ['60-minutes-or-less', 'time-to-make'...] | [138.4, 10.0, 50.0, 3.0, 3.0, 19.0, 6.0] | 10 | ['heat the oven to 350f and arrange'...] | these are the most; chocolatey... | ['bittersweet chocolate', 'unsalted butter'...] |  9 | 386585           | 2008-11-19 |   4 | These were pretty...   |  4 |  -0.482026 |  -0.395726 | -0.0657603 | 0.943512 | True |
 | 1 in canada chocolate chip...| 453467 | 45 | 1848091 | 2011-04-11  | ['60-minutes-or-less', 'time-to-make'...] | [595.1, 46.0, 211.0, 22.0, 13.0, 51.0, 26.0] | 12 | ['pre-heat oven the 350 degrees f'...] | this is the recipe...| ['white sugar', 'brown sugar' ...] | 11 | 424680 | 2012-01-26 | 5 | Originally I was gonna cut the ...| 5 | 0.301036 | 0.254186 | 0.699211  | -1.25443  | False |
 | 412 broccoli casserole | 306168 | 40 | 50969 | 2008-05-30 | ['60-minutes-or-less', 'time-to-make' ...] | [194.8, 20.0, 6.0, 32.0, 22.0, 36.0, 3.0] | 6 | ['preheat oven to 350 degrees', 'spray a '...] | since there are already 411 recipes for broccoli casserole... | ['frozen broccoli cuts', 'cream of chicken soup', 'sharp'...] | 9 |  29782 | 2008-12-31 | 5 | This was one of the best broccoli... | 5 |  -0.385322 |  -0.215195 | -0.274821  | 0.875337 | True |
@@ -97,7 +97,7 @@ This grouped table shows the increasing trend of mean cooking time across the 2n
 
 We were interested in exploring the missingness of various columns in our DataFrame. The first step we took was to count the number of missing values in each column. We received the following counts:
 
-'| index                 |     0 |\n|:----------------------|------:|\n| name                  |     1 |\n| id                    |     0 |\n| minutes               |     0 |\n| contributor_id        |     0 |\n| submitted             |     0 |\n| tags                  |     0 |\n| nutrition             |     0 |\n| n_steps               |     0 |\n| steps                 |     0 |\n| description           |   113 |\n| ingredients           |     0 |\n| n_ingredients         |     0 |\n| user_id               |     1 |\n| date                  |     1 |\n| rating                | 14740 |\n| review                |    56 |\n| average_rating        |  2706 |\n| standardized_calories |     0 |\n| standardized_fat      |     0 |\n| standardized_sugar    |     0 |\n| health_score          |     0 |\n| is_healthy            |     0 |'
+| index                 |     0 |\n|:----------------------|------:|\n| name                  |     1 |\n| id                    |     0 |\n| minutes               |     0 |\n| contributor_id        |     0 |\n| submitted             |     0 |\n| tags                  |     0 |\n| nutrition             |     0 |\n| n_steps               |     0 |\n| steps                 |     0 |\n| description           |   113 |\n| ingredients           |     0 |\n| n_ingredients         |     0 |\n| user_id               |     1 |\n| date                  |     1 |\n| rating                | 14740 |\n| review                |    56 |\n| average_rating        |  2706 |\n| standardized_calories |     0 |\n| standardized_fat      |     0 |\n| standardized_sugar    |     0 |\n| health_score          |     0 |\n| is_healthy            |     0 |
 
 The only columns with a significant number of missing values are 'description', 'rating', 'review', and 'average_rating'.
 
@@ -178,7 +178,7 @@ The graph below displays the observed_tvd as a vertical red line, showing a sign
 <iframe
   src="figures/permutation_test.html"
   width="800"
-  height="450"
+  height="500"
   frameborder="0"
 ></iframe>
 

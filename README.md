@@ -1,5 +1,6 @@
 # Does Nutrition Affect Cooking Time? A Data-Driven Analysis of Recipes
 Final Project for UC San Diego's DSC80 Course
+
 Names: Saanvi Ranadive and Ritvik Chand
 
 
@@ -7,7 +8,7 @@ Names: Saanvi Ranadive and Ritvik Chand
 
 This project was conducted at UC San Diego as a final project for the DSC80 Course.
 
-Throughout this investigation, we explore the relationship between healthiness and cooking time of recipes. We aim to answer the question: **Is a recipe's nutritional information (including number of calories, amount of fat, and amount of sugar) a strong predictor of how long it takes to cook the recipe?** In our personal experience, we've found that healthier meals often take longer to prepare, and were wondering if this was reflective of a broader trend. Understanding whether nutritional factors impact cooking time can provide valuable insights for people cooking at home, meal preparation, and the food industry. The existence of strong trends between nutrition and cooking time could help people make more informed decisions about meal planning, assist in designing recipes, and ultimately make it easier for individuals to prioritize nutrition without sacrificing too much time in the kitchen.
+Throughout this investigation, we explore the relationship between healthiness and cooking time of recipes. We aim to answer the question: **Is a recipe's nutritional information (including number of calories, amount of fat, and amount of sugar) a strong predictor of how long it takes to cook the recipe?** In our personal experience, we've found that healthier meals often take longer to prepare, and were wondering if this was reflective of a broader trend. Understanding whether nutritional factors impact cooking time can provide valuable insights for people cooking at home, meal preparation, and the food industry. The existence of strong trends between nutrition and cooking time could help people make more informed decisions about meal planning and assist in designing recipes.
 
 We will analyze two datasets from [food.com](https://www.food.com/): **recipes**, which focuses on information about each recipe as uploaded by the contributer; and **interactions**, which details the ratings and reviews from users who used each recipe.
 
@@ -323,9 +324,95 @@ While our baseline model gave us a starting point to work with, we knew that the
 
 ### Feature Engineering
 
-To improve the performance of our baseline model, we implemented 2 feature engineering techniques to help improve the precision of our baseline model. The first one was **Polynomial Features** which helped us to interpret the non-linear relationship between the nutritional features (standardized_calories, standardized_fat, and standardized_sugar). This transformation approach creates interaction values that allow the model to learn how combinations of these nutritional factors might asynchronously affect cooking time. This helps the model discover relationships that exist in cooking. The second technique is a **Quantile Transformer**, which essentially just normalizes the distributions of the features that we have selected. It helps to handle skewed data by mapping the original values to a normal distribution. There are many recipes with moderate calorie counts and fewer with extremely high values. By normalizing these distributions, we help the model treat outliers more appropriately and improve its ability to learn from the entire range of nutritional profiles.
+To improve the performance of our baseline model, we implemented 2 feature engineering techniques to help improve the precision of our baseline model. The first one was **Polynomial Features** which helped us to interpret the non-linear relationship between the nutritional features (standardized_calories, standardized_fat, and standardized_sugar). This transformation approach creates interaction values that allow the model to learn how combinations of these nutritional factors might asynchronously affect cooking time. This helps the model discover relationships that exist in cooking. The second technique is a **Quantile Transformer**, which essentially normalizes the distributions of the features that we have selected. It helps to handle skewed data by mapping the original values to a normal distribution. There are many recipes with moderate calorie counts and fewer with extremely high values. By normalizing these distributions, we help the model treat outliers more appropriately and improve its ability to learn from the entire range of nutritional profiles.
 
+### Model Selection
+
+The regression algorithms that we chose to experiment with during our final model training are Random Forest Regressor, Gradient Boosting, and KNN Regressor. The model that performed the best was the KNN Regressor, which we chose because it is able to work with highly non-linear and complex relationships, due to its lazy learning nature.
+
+### Hyperparameter Tuning
+
+We decided to use Grid Search CV for our hyperparameter tuning over the following parameters:
+
+- n_neighbors: controls the number of nearest neighbors used to make the prediction
+- weights: controls how much neighbor points contribute to predictions
+  - "uniform": all neighbors contribute equally
+  - "distance": closer neighbors contribute more
+- p: metric for computing the distance between points
+- polynomial degree: determines whether to use degree 1 (original features) or degree 2 (with interaction terms)
+
+The values that performed the best were:
+
+- n_neighbors: 15
+- weights: "distance"
+- p: 2
+- polynomial degree: 1
+
+### Final Model Assessment
+
+**Random Forest**:
+RandomForest RMSE: 0.6092942882318164
+RandomForest R²: 0.6193591146611772
+
+**Gradient Boosting**: 
+GradientBoosting RMSE: 0.6391775008194075
+GradientBoosting R²: 0.5811059615532148
+
+**KNN**:
+KNN RMSE: 0.47444079777498166
+KNN R²: 0.7692055951291167
+
+Final Model vs Baseline Model:
+RMSE Improvement: **50.58%**
+R² Improvement: **1823.01%**
+
+Our final KNN Regression model showed significant improvement over the baseline linear regression model:
+
+- The RMSE decreased from the baseline model from 0.96 to 0.47, indicating that our predictions are closer to the actual cooking times.
+
+- The R^2 score increased from 0.04 to 0.77 showing that our model explains much more of the variance in cooking times.
+
+This improvement validates our approach to feature engineering and model selection. The KNN Regressor's performance suggests that the relationship between nutritional content and cooking time is nonlinear and more complex, requiring a more sophisticated modeling approach than linear regression.
 
 ## Fairness Analysis
 
-After training and evaluating our model, we were curious to see how it would perform on recipes with various numbers of ingredients. We decided to analyze the fairness of our model by evaluating how it performs on **recipes with more than 9 ingredients** vs. **recipes with less than 9 ingredients**. 
+After training and evaluating our model, we were curious to see how it would perform for different subgroups within the recipes dataset. Specifically, we decided to analyze the fairness of our model by evaluating how it performs on **recipes with 9 or more ingredients** vs. **recipes with less than 9 ingredients**. We chose these groups because we predict that recipes with more ingredients would take more time to cook, and so we wanted to see if the number of ingredients would affect our model's performance. Additionally, we decided on the threshold value of 9 because it was the median number of ingredients in the dataset, and so it would create two groups that are roughly equal in size. We will run a permutation test and evaluate the **RMSE parity** for both groups.
+
+**Null Hypothesis**: Our model's RMSE for recipes with 9 or more ingredients is roughly the same as its RMSE for recipes with less than 9 ingredients, and any differences are due to random chance.
+
+**Alternative Hypothesis**: Our model's RMSE for recipes with 9 or more ingredients is lower than its RMSE for recipes with less than 9 ingredients.
+
+**Test Statistic**: Difference in RMSE (RMSE<sub>more_than_9_ingredients</sub> - RMSE<sub>less_than_9_ingredients</sub>)
+
+**Significance Level**: 0.05
+
+**Number of Permutations**: 1000
+
+To analyze the fairness of our model across these groups, we first needed to calculate the observed test statistic. We did so by creating a new boolean column 'more_than_9' to specify whether or not each recipe had 9 or more ingredients (number of ingredients is recorded in the column 'n_ingredients'). Then, we used our fitted KNN regressor model to predict the 'minutes' column for each recipe in each of the groups. Finally, we grouped by the 'more_than_9' column to find the RMSE's for each group, and subtracted to get the difference.
+
+For the permutation test, we shuffled the 'more_than_9' column and followed a similar procedure as the one above to obtain the 1000 test statistics. The permutation test gave the following distribution, with the vertical red line representing the observed RMSE difference:
+
+<iframe
+  src="figures/fairness.html"
+  width="800"
+  height="520"
+  frameborder="0"
+></iframe>
+
+The p-value for this test was 0.0, and because 0.0 < 0.05 (significance level), we *reject the null hypothesis*. This means that our model did not achieve RMSE parity for these groups.
+
+To address this, we may consider adding the 'n_ingredients' column to future versions of our model to ensure it performs more evenly across recipe complexity levels.
+
+## Conclusion
+
+Throughout this investigation of nutrition as a predictor of cooking time for recipes, we valuable insights into the complex relationship between these two variables.
+
+In the Exploratory Data Analysis stage, we uncovered an instance of Simpson's Paradox, where the overall trend between 'health_score' and 'cooking_time' is positive, yet, on average, healthy recipes had a lower cooking time than unhealthy recipes.
+
+We then examined the missingness dependency of the 'description' column on both 'health_score' and 'minutes', and found that the missingness of 'description' was dependent on 'health_score' but not necessarily on 'minutes'. 
+
+We went on to run a permutation test to determine whether the observed difference in mean cooking times between healthy and unhealthy recipes (found in the Exploratory Data Analysis stage) was purely due to chance. Our results confirmed that the difference was statistically significant, reinforcing the finding that healthy recipes tend to require less cooking time than unhealthy ones. 
+
+Finally, we built a regression model to address the prediction problem, **How many minutes will it take to cook a recipe based on its number of calories, amount of fat, and amount of sugar?** We started with a linear regression model as a baseline and then implemented a KNN regressor as our final model, achieving significant improvementin both RMSE and R^2. However, our fairness analysis revealed that RMSE parity was not achieved between recipes with more than 9 ingredients and those with fewer, suggesting that recipe complexity affects model performance.
+
+We hope our findings will contribute to a better understanding of how nutritional factors relate to cooking time, ultimately making it easier for individuals to prioritize nutrition without sacrificing too much time in the kitchen.

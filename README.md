@@ -293,7 +293,7 @@ Our permutation test from the previous section showed us that 'healthy' and 'unh
 
 This is a **regression** problem, as the column we are planning to predict, 'minutes', is a numerical variable signifying cooking time.
 
-We will use **root mean squared error** (RMSE) as the main metric to evaluate our models. The reason for this choice is that the distribution of our response variable, 'minutes' was highly right skewed. RMSE heavily penalizes larger errors (due to the squaring step in the RMSE calculation), so it is particularly useful for minimizing error for extreme values. Additionally, it returns a value in the same units as the response variable (minutes), allowing for better interpretability and evaluation of results. We will also use the **R^2 score** to measure how much of the variance in the target variable is explained by the model. Together, both of these metrics will help us effectively compare performance across models.
+We will use **root mean squared error** (RMSE) as the main metric to evaluate our models. The reason for this choice is that the distribution of our response variable, 'minutes' was highly right skewed. RMSE heavily penalizes larger errors (due to the squaring step in the RMSE calculation), so it is particularly useful for minimizing error for extreme values. Additionally, it returns a value in the same units as the response variable (minutes), allowing for better interpretability and evaluation of results. We will also use the **R² score** to measure how much of the variance in the target variable is explained by the model. Together, both of these metrics will help us effectively compare performance across models.
 
 
 ## Baseline Model
@@ -313,10 +313,10 @@ The features that we included in our baseline model are the following:
 All three features in our baseline model are quantitative variables that had already been standardized in the data cleaning part above. The standardization helps address scale differences between the nutritional variables and improves the model's stability. As all our features were already preprocessed and no categorical variables were included in the baseline model, we did not need to add any extra encoding techniques.
 
 ### Model Evaluation and Assessment
-To evaluate our baseline model's performance, we used two metrics, RMSE and R^2. The scores that our baseline model achieved are below:
+To evaluate our baseline model's performance, we used two metrics, RMSE and R². The scores that our baseline model achieved are below:
 
 1. **RMSE**: 0.94
-2. **R^2**: 0.06
+2. **R²**: 0.06
 
 While our baseline model gave us a starting point to work with, we knew that there was room for improvement. One of the reasons why the Linear Regression model did not perform optimally is because it assumes a linear relationship between the features and response variable. We already saw in previous steps that this relationship is much more complex. In addition, our baseline model uses three nutritional factors, which may not include all the factors that influence cooking time. Some other factors that we posed include the method of cooking and steps of preparation. Lastly, the linear model allows us to identify how only one feature can affect cooking time but not how two features interact with each other. Thus, our baseline model using linear regression gives us satisfactory performance, but many things could be improved to better represent the relationship between cooking time and nutritional content.
 
@@ -376,7 +376,7 @@ Our final KNN Regression model showed significant improvement over the baseline 
 
 - The RMSE decreased from 0.96 to 0.47, indicating that our predictions are closer to the actual cooking times.
 
-- The R^2 score increased from 0.04 to 0.77 showing that our model explains much more of the variance in cooking times.
+- The R² score increased from 0.04 to 0.77 showing that our model explains much more of the variance in cooking times.
 
 This improvement validates our approach to feature engineering and model selection. The KNN Regressor's performance suggests that the relationship between nutritional content and cooking time is nonlinear and more complex, requiring a more sophisticated modeling approach than linear regression.
 
@@ -419,6 +419,6 @@ We then examined the missingness dependency of the 'description' column on both 
 
 We went on to run a permutation test to determine whether the observed difference in mean cooking times between healthy and unhealthy recipes (found in the Exploratory Data Analysis stage) was purely due to chance. Our results confirmed that the difference was statistically significant, reinforcing the finding that healthy recipes tend to require less cooking time than unhealthy ones. 
 
-Finally, we built a regression model to address the prediction problem, **How many minutes will it take to cook a recipe based on its number of calories, amount of fat, and amount of sugar?** We started with a linear regression model as a baseline and then implemented a KNN regressor as our final model, achieving significant improvement in both RMSE and R^2. However, our fairness analysis revealed that RMSE parity was not achieved between recipes with more than 9 ingredients and those with fewer, suggesting that recipe complexity affects model performance.
+Finally, we built a regression model to address the prediction problem, **How many minutes will it take to cook a recipe based on its number of calories, amount of fat, and amount of sugar?** We started with a linear regression model as a baseline and then implemented a KNN regressor as our final model, achieving significant improvement in both RMSE and R². However, our fairness analysis revealed that RMSE parity was not achieved between recipes with more than 9 ingredients and those with fewer, suggesting that recipe complexity affects model performance.
 
 We hope our findings will contribute to a better understanding of how nutritional factors relate to cooking time, ultimately making it easier for individuals to prioritize nutrition without sacrificing too much time in the kitchen.

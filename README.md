@@ -352,16 +352,19 @@ The values that performed the best were:
 ### Final Model Assessment
 
 **Random Forest**:
+
 RandomForest RMSE: 0.6092942882318164
 
 RandomForest R²: 0.6193591146611772
 
 **Gradient Boosting**: 
+
 GradientBoosting RMSE: 0.6391775008194075
 
 GradientBoosting R²: 0.5811059615532148
 
 **KNN**:
+
 KNN RMSE: 0.47444079777498166
 
 KNN R²: 0.7692055951291167
